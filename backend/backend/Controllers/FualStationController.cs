@@ -37,14 +37,14 @@ public class FuelStationController : Controller
         return await _fuelStationService.GetByIdAsync(id);
     }
 
-    // // update fuel status in fuel station
-    // [HttpPut("{id}")]
+    // update fuel status in fuel station
+    [HttpPut("{id}")]
     // [Route("UpdateFuelStatus")]
-    // public async Task<IActionResult> UpdateFuelStatus(string id, [FromBody] object fuelStatus)
-    // {
-    //     await _fuelStationService.UpdateFuelStatus(id, fuelStatus);
-    //     return NoContent();
-    // }
+    public async Task<IActionResult> UpdateFuelStatus(string id, [FromBody] FuelStatus[] fuelStatuses)
+    {
+        await _fuelStationService.UpdateFuelStatusAsync(id, fuelStatuses);
+        return NoContent();
+    }
 
     // // This is required to update petrol status
     // [HttpPut]

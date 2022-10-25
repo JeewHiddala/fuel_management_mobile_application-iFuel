@@ -9,11 +9,13 @@ namespace Ifuel.Models
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
         public string? Id {get; set;}
-        [BsonElement("fuelstatuses")]
-        [JsonPropertyName("fuelstatuses")]
-        public List<object> fuelStatus {get; set;}  = null!;
-        [BsonElement("type")]
-        public string location {get; set;}  = null!;
+        [BsonElement("ownerId")]
+        public int? OwnerId {get; set;}
+        [BsonElement("fuelStatuses")]
+        // [JsonPropertyName("fuelStatuses")]
+        public FuelStatus[] FuelStatuses {get; set;}  = null!;
+        [BsonElement("location")]
+        public string Location {get; set;}  = null!;
 
     }
 }

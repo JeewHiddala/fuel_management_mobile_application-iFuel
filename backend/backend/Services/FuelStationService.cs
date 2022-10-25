@@ -36,13 +36,13 @@ namespace Ifuel.Services
             return await _collection.Find( c => c.Id == id).SingleAsync();
         }
 
-        // // update fual status in selected fuel station
-        // public async Task UpdateFuelStatus(string id, object fuelStatus) {
-        //     FilterDefinition<FuelStation> filter = Builders<FuelStation>.Filter.Eq("Id", id);
-        //     UpdateDefinition<FuelStation> update = Builders<FuelStation>.Update.AddToSet<object>("fuelstatuses",fuelStatus);
-        //     await _collection.UpdateOneAsync(filter, update);
-        //     return;
-        // }
+        // update fual status in selected fuel station
+        public async Task UpdateFuelStatusAsync(string id, FuelStatus[] fuelStatuses) {
+            FilterDefinition<FuelStation> filter = Builders<FuelStation>.Filter.Eq("Id", id);
+            UpdateDefinition<FuelStation> update = Builders<FuelStation>.Update.Set("fuelStatuses",fuelStatuses);
+            await _collection.UpdateOneAsync(filter, update);
+            return;
+        }
     
 
         // //This is required to create a fuel object
