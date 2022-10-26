@@ -8,39 +8,46 @@ namespace Ifuel.Services
     public class FuelStationService
     {
         //creating the database connection
-        private readonly IMongoCollection<FuelStation> _collection;
-        public FuelStationService(IOptions<Connection> Connection)
+        private readonly IMongoCollection<FuelStation> _fuelStationCollection;
+        public FuelStationService(IOptions<FuelStationDatabaseSettings> fuelStationDatabaseSettings)
         {
             MongoClient client = new MongoClient(
-                Connection.Value.ConnectionURI);
+                fuelStationDatabaseSettings.Value.ConnectionString);
 
             IMongoDatabase database = client.GetDatabase(
-                Connection.Value.DatabaseName);
+                fuelStationDatabaseSettings.Value.DatabaseName);
 
-            _collection = database.GetCollection<FuelStation>(
-                Connection.Value.CollectionName);
+            _fuelStationCollection = database.GetCollection<FuelStation>(
+                fuelStationDatabaseSettings.Value.FuelStationName);
         }
 
         // create a new fuel station
         public async Task CreateAsync(FuelStation fuelstation){
-            await _collection.InsertOneAsync(fuelstation);
+            await _fuelStationCollection.InsertOneAsync(fuelstation);
             return;
         }
 
         // get all fuel stations
         public async Task <List<FuelStation>> GetAsync() {
-            return await _collection.Find(new BsonDocument()).ToListAsync();
+            return await _fuelStationCollection.Find(new BsonDocument()).ToListAsync();
         }
 
         public async Task<FuelStation> GetByIdAsync(string id) {
-            return await _collection.Find( c => c.Id == id).SingleAsync();
+            return await _fuelStationCollection.Find( c => c.Id == id).SingleAsync();
         }
 
         // update fual status in selected fuel station
+        // public async Task UpdateFuelStatusAsync(string id, FuelStatus[] fuelStatuses) {
+        //     FilterDefinition<FuelStation> filter = Builders<FuelStation>.Filter.Eq("Id", id);
+        //     UpdateDefinition<FuelStation> update = Builders<FuelStation>.Update.Set("fuelStatuses",fuelStatuses);
+        //     await _fuelStationCollection.UpdateOneAsync(filter, update);
+        //     return;
+        // }
+
         public async Task UpdateFuelStatusAsync(string id, FuelStatus[] fuelStatuses) {
             FilterDefinition<FuelStation> filter = Builders<FuelStation>.Filter.Eq("Id", id);
             UpdateDefinition<FuelStation> update = Builders<FuelStation>.Update.Set("fuelStatuses",fuelStatuses);
-            await _collection.UpdateOneAsync(filter, update);
+            await _fuelStationCollection.UpdateOneAsync(filter, update);
             return;
         }
     

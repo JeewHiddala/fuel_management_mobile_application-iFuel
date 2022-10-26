@@ -2,8 +2,10 @@ using Ifuel.Models;
 using Ifuel.Services;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.Configure<Connection>(builder.Configuration.GetSection("MongoDB"));
+builder.Services.Configure<FuelStationDatabaseSettings>(builder.Configuration.GetSection("FuelStationCollection"));
+builder.Services.Configure<FuelQueueDatabaseSettings>(builder.Configuration.GetSection("FuelQueueCollection"));
 builder.Services.AddSingleton<FuelStationService>();
+builder.Services.AddSingleton<FuelQueueService>();
 
 // Add services to the container.
 
