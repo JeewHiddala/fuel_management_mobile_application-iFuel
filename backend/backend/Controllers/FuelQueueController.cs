@@ -11,11 +11,13 @@ public class FuelQueueController : Controller
 {
     // Declearing the fuel station service instance
     private readonly FuelQueueService _fuelQueueService;
-    public FuelQueueController(FuelQueueService fuelQueueService) {
+    private readonly FuelStationService _fuelStationService;
+    public FuelQueueController(FuelQueueService fuelQueueService, FuelStationService fuelStationService) {
         _fuelQueueService = fuelQueueService;
+        _fuelStationService = fuelStationService;
     }
     
-    // This is required to create a fuel queue
+    // create a fuel queue
     [HttpPost]
     public async Task<IActionResult> Post([FromBody] FuelQueue fuelQueue)
     {
@@ -23,18 +25,33 @@ public class FuelQueueController : Controller
             return CreatedAtAction(nameof(GetFuelStations), new {id = fuelQueue.Id}, fuelQueue);
     }
 
-    // This is required to get all fuel queues
+    // get all fuel queues
     [HttpGet]
     public async Task<List<FuelQueue>> GetFuelStations()
     {
         return await _fuelQueueService.GetAsync();
     }
 
-    // This is required to get fuel queue point by id
+    // get fuel queue point by id
     [HttpGet("{id}")]
     public async Task<FuelQueue> GetFuelStationById(string id)
     {
         return await _fuelQueueService.GetByIdAsync(id);
+    }
+
+    // get fuel queue length
+    [HttpGet]
+    public async Task<Array> GetQueueLengthByVehicalType(string userVehicalType){
+        return await _fuelQueueService.GetQueueLengthAsync(userVehicalType);
+    }
+
+    // get fuel queue time 
+    [HttpGet]
+    [Route("GetQueueTime")]
+    public async Task<Array> GetQueueTime(string id){
+        var station = await _fuelStationService.GetFuelStationById(id);
+        var res = await _fuelQueueService.GetQueueTimeAsync(station.Queue[0]);
+        return res;
     }
 
     // update departure time in fuel queue
@@ -46,52 +63,11 @@ public class FuelQueueController : Controller
         return NoContent();
     }
 
-    // delete queue data
+    // delete past queue data
     [HttpDelete("{id}")]
     public async Task<IActionResult> Delete(string id){
         await _fuelQueueService.DeleteAsync(id);
         return NoContent();
     }
 
-
-    // // update fuel status in fuel station
-    // [HttpPut("{id}")]
-    // // [Route("UpdateFuelStatus")]
-    // public async Task<IActionResult> UpdateFuelPumpStatus(string id, [FromBody] bool fuelPumpStatus)
-    // {
-    //     await _fuelQueueService.UpdateFuelPumpStatusAsync(id, fuelPumpStatus);
-    //     return NoContent();
-    // }
-
-    // // This is required to update petrol status
-    // [HttpPut]
-    // [Route("UpdatePetrolStatus")]
-    // public async Task<FuelStationModel> UpdatePetrolStatus(bool status, string id)
-    // {
-    //     try
-    //     {
-    //         var res = await _fuelStationService.UpdatePetrolStatus(status, id);
-    //         return res;
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return null;
-    //     }
-    // }
-
-    // [HttpPut]
-    // [Route("UpdateFuelAmount")]
-    // // This is required to update the total fuel amount
-    // public async void UpdateTotalFuelAmount(string stationId, int amount, string type)
-    // {
-    //     try
-    //     {
-    //         var currentAmount = await _fuelStationService.getCurrentFuelAmount(stationId, type);
-    //         _fuelStationService.UpdateTotalFuelAmount(stationId, amount, type, currentAmount);
-    //     }
-    //     catch(Exception ex)
-    //     {
-
-    //     }
-    // }
 }

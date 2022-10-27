@@ -46,35 +46,4 @@ public class FuelStationController : Controller
         return NoContent();
     }
 
-    // // This is required to update petrol status
-    // [HttpPut]
-    // [Route("UpdatePetrolStatus")]
-    // public async Task<FuelStationModel> UpdatePetrolStatus(bool status, string id)
-    // {
-    //     try
-    //     {
-    //         var res = await _fuelStationService.UpdatePetrolStatus(status, id);
-    //         return res;
-    //     }
-    //     catch (Exception ex)
-    //     {
-    //         return null;
-    //     }
-    // }
-
-    // [HttpPut]
-    // [Route("UpdateFuelAmount")]
-    // // This is required to update the total fuel amount
-    // public async void UpdateTotalFuelAmount(string stationId, int amount, string type)
-    // {
-    //     try
-    //     {
-    //         var currentAmount = await _fuelStationService.getCurrentFuelAmount(stationId, type);
-    //         _fuelStationService.UpdateTotalFuelAmount(stationId, amount, type, currentAmount);
-    //     }
-    //     catch(Exception ex)
-    //     {
-
-    //     }
-    // }
 }

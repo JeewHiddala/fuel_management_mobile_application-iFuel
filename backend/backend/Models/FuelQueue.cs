@@ -11,6 +11,8 @@ namespace Ifuel.Models
         public string? Id {get; set;}
         [BsonElement("userId")]
         public int? UserId {get; set;}
+        [BsonElement("userVehicalType")]
+        public string? UserVehicalType {get; set;}
         [BsonElement("stationId")]
         public string? StationId {get; set;}
         // [BsonElement("arrivalDate")]
